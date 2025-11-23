@@ -3,17 +3,15 @@ package com.example.personaltaskmanager.features.task_manager.domain.usecase;
 import com.example.personaltaskmanager.features.task_manager.data.model.Task;
 import com.example.personaltaskmanager.features.task_manager.data.repository.TaskRepository;
 
-import java.util.List;
-
-public class GetTasksUseCase {
+public class AddTaskUseCase {
 
     private final TaskRepository repository;
 
-    public GetTasksUseCase(TaskRepository repository) {
+    public AddTaskUseCase(TaskRepository repository) {
         this.repository = repository;
     }
 
-    public List<Task> execute() {
-        return repository.getAllTasks();
+    public long execute(Task task) {
+        return repository.addTask(task);
     }
 }
