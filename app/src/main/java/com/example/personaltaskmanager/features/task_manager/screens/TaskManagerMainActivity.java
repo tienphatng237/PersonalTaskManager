@@ -1,7 +1,12 @@
 package com.example.personaltaskmanager.features.task_manager.screens;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.graphics.Color;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
@@ -29,11 +34,32 @@ public class TaskManagerMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feature_task_manager_main);
 
+        setLightStatusBar();
+
         initViews();
         setupBottomNav();
         setupActions();
         setupRecyclerView();
         setupViewModelObserve();
+    }
+
+    private void setLightStatusBar() {
+        Window window = getWindow();
+        window.setStatusBarColor(Color.WHITE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                controller.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
+        } else {
+            window.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            );
+        }
     }
 
     private void initViews() {
@@ -50,7 +76,7 @@ public class TaskManagerMainActivity extends AppCompatActivity {
 
     private void setupBottomNav() {
         navHome.setOnClickListener(v -> {
-            // TODO
+
         });
 
         navTasks.setOnClickListener(v -> {
@@ -59,12 +85,11 @@ public class TaskManagerMainActivity extends AppCompatActivity {
         });
 
         navProfile.setOnClickListener(v -> {
-            // TODO
+
         });
     }
 
     private void setupActions() {
-
         fabAddTask.setOnClickListener(v -> {
             Intent intent = new Intent(this, TaskDetailActivity.class);
             startActivity(intent);
@@ -80,21 +105,13 @@ public class TaskManagerMainActivity extends AppCompatActivity {
         rvTasks.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new TaskAdapter(
-
-                // CLICK ITEM → mở chi tiết
                 task -> {
                     Intent intent = new Intent(TaskManagerMainActivity.this, TaskDetailActivity.class);
                     intent.putExtra("task_id", task.getId());
                     startActivity(intent);
                 },
-
-                // DELETE → Dialog confirm
                 this::showDeleteConfirmDialog,
-
-                // ⭐ TOGGLE COMPLETED
-                (task, done) -> {
-                    taskViewModel.toggleCompleted(task, done);
-                }
+                (task, done) -> taskViewModel.toggleCompleted(task, done)
         );
 
         rvTasks.setAdapter(adapter);
@@ -108,16 +125,11 @@ public class TaskManagerMainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Hiện dialog xác nhận xoá task
-     */
     private void showDeleteConfirmDialog(Task task) {
         new AlertDialog.Builder(this)
                 .setTitle("Xóa công việc?")
                 .setMessage("Bạn có chắc muốn xóa \"" + task.getTitle() + "\" không?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    taskViewModel.deleteTask(task);
-                })
+                .setPositiveButton("Xóa", (dialog, which) -> taskViewModel.deleteTask(task))
                 .setNegativeButton("Hủy", null)
                 .show();
     }

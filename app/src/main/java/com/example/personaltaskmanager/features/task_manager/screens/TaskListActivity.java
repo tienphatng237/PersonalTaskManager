@@ -1,7 +1,12 @@
 package com.example.personaltaskmanager.features.task_manager.screens;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.graphics.Color;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowInsetsController;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,52 +35,51 @@ public class TaskListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feature_task_manager_list);
 
+        setLightStatusBar();
+
         recyclerView = findViewById(R.id.rv_list_tasks);
         fabAdd = findViewById(R.id.fab_add_task);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // ========================================================
-        //  ADAPTER (click item + delete + toggle completed)
-        // ========================================================
         adapter = new TaskAdapter(
-
-                // CLICK ITEM → mở task detail
                 task -> {
                     Intent intent = new Intent(TaskListActivity.this, TaskDetailActivity.class);
                     intent.putExtra("task_id", task.getId());
                     startActivity(intent);
                 },
-
-                // DELETE
-                task -> {
-                    viewModel.deleteTask(task);
-                },
-
-                // ⭐ TOGGLE COMPLETED
-                (task, done) -> {
-                    viewModel.toggleCompleted(task, done);
-                }
+                task -> viewModel.deleteTask(task),
+                (task, done) -> viewModel.toggleCompleted(task, done)
         );
 
         recyclerView.setAdapter(adapter);
 
-        // Lấy ViewModel
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        // Observe DB → UI tự cập nhật
         viewModel.getAllTasks().observe(this, tasks -> adapter.setData(tasks));
 
-        // Nút mở màn thêm Task
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(this, TaskDetailActivity.class);
             startActivityForResult(intent, REQUEST_ADD_TASK);
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Không cần reload — LiveData tự cập nhật UI
+    private void setLightStatusBar() {
+        Window window = getWindow();
+        window.setStatusBarColor(Color.WHITE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                controller.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
+        } else {
+            window.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            );
+        }
     }
 }
