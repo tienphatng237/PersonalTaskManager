@@ -1,5 +1,5 @@
 <resources>
-    <color name="calendar_primary">#009688</color>
+    <color name="calendar_primary">#69FFEE</color>
     <color name="calendar_today_bg">#FFF8B0</color>
     <color name="calendar_text_default">#212121</color>
 </resources>

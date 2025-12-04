@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsetsController;
-import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,14 +20,19 @@ import com.example.personaltaskmanager.features.task_manager.viewmodel.TaskViewM
 import com.example.personaltaskmanager.features.task_manager.data.model.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+/**
+ * Màn hình chính của Task Manager.
+ * Giữ nguyên cấu trúc cũ, chỉ bỏ phần Bottom Navigation
+ * vì layout hiện tại chưa có bottom_nav.
+ */
 public class TaskManagerMainActivity extends AppCompatActivity {
 
-    private LinearLayout navHome, navTasks, navProfile;
     private FloatingActionButton fabAddTask;
-
     private RecyclerView rvTasks;
     private TaskAdapter adapter;
     private TaskViewModel taskViewModel;
+
+    private Spinner spinnerFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,6 @@ public class TaskManagerMainActivity extends AppCompatActivity {
         setLightStatusBar();
 
         initViews();
-        setupBottomNav();
         setupActions();
         setupRecyclerView();
         setupViewModelObserve();
@@ -63,30 +67,9 @@ public class TaskManagerMainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        LinearLayout bottomNav = findViewById(R.id.bottom_nav);
-
-        navHome = bottomNav.findViewById(R.id.nav_home);
-        navTasks = bottomNav.findViewById(R.id.nav_tasks);
-        navProfile = bottomNav.findViewById(R.id.nav_profile);
-
         fabAddTask = findViewById(R.id.fab_add_task);
-
         rvTasks = findViewById(R.id.rv_tasks);
-    }
-
-    private void setupBottomNav() {
-        navHome.setOnClickListener(v -> {
-
-        });
-
-        navTasks.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TaskListActivity.class);
-            startActivity(intent);
-        });
-
-        navProfile.setOnClickListener(v -> {
-
-        });
+        spinnerFilter = findViewById(R.id.spinner_filter);
     }
 
     private void setupActions() {

@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Màn hình danh sách công việc
-    Bao gồm:
-     - Tiêu đề
-     - RecyclerView danh sách task
-     - FAB để thêm task mới
--->
-
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,30 +18,28 @@
         android:text="Danh sách công việc"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="#222222"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- RECYCLER VIEW -->
-
-    <!-- FAB -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list_tasks"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@android:layout/simple_list_item_1" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/feature_task_manager_item_task" />
 
+    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:contentDescription="Thêm task"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="@android:color/white"

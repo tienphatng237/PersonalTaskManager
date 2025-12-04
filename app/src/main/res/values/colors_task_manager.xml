@@ -21,4 +21,8 @@
     <!-- Checkbox khi đã hoàn thành -->
     <color name="task_checkbox_done_tint">#1AEFB3</color>  <!-- xanh lá -->
 
+    <color name="deadline_today">#2196F3</color>
+    <color name="deadline_overdue">#EF5350</color>
+    <color name="deadline_upcoming">#66BB6A</color>
+
 </resources>
