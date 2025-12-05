@@ -26,7 +26,7 @@ public class TaskViewModel extends AndroidViewModel {
     private final AddTaskUseCase addTaskUseCase;
     private final DeleteTaskUseCase deleteTaskUseCase;
 
-
+    // NEW — use case lấy task theo ngày
     private final GetTasksByDateUseCase getTasksByDateUseCase;
 
     private final LiveData<List<Task>> allTasksLiveData;
@@ -52,13 +52,27 @@ public class TaskViewModel extends AndroidViewModel {
         return repository.getTaskById(id);
     }
 
-    // ADD Task + deadline
+    /**
+     * ADD Task + deadline
+     * Giữ nguyên logic cũ, chỉ bổ sung notesJson & tablesJson (để dọn chỗ cho 2 feature mới).
+     */
     public void addTask(String title, String description, long deadline) {
-        Task task = new Task(title, description, System.currentTimeMillis(), deadline);
+
+        Task task = new Task(
+                title,
+                description,
+                System.currentTimeMillis(), // createdAt
+                deadline,
+                "",   // notesJson — sẽ dùng cho feature Quick Notes
+                ""    // tablesJson — sẽ dùng cho feature Tables
+        );
+
         addTaskUseCase.execute(task);
     }
 
-    // UPDATE Task + deadline
+    /**
+     * UPDATE Task + deadline
+     */
     public void updateTask(Task task, String newTitle, String newDesc, long deadline) {
         task.setTitle(newTitle);
         task.setDescription(newDesc);
@@ -70,13 +84,17 @@ public class TaskViewModel extends AndroidViewModel {
         deleteTaskUseCase.execute(task);
     }
 
-    // Toggle completed
+    /**
+     * Toggle completed
+     */
     public void toggleCompleted(Task task, boolean done) {
         task.setCompleted(done);
         repository.updateCompleted(task, done);
     }
 
-    // NEW — Lấy task theo ngày
+    /**
+     * NEW — Lấy task theo ngày
+     */
     public LiveData<List<Task>> getTasksByDate(long start, long end) {
         return getTasksByDateUseCase.execute(start, end);
     }
