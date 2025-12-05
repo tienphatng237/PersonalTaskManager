@@ -4,7 +4,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 /**
- * Entity đại diện dữ liệu người dùng trong Room DB (AuthDatabase)
+ * Entity đại diện dữ liệu người dùng trong Room DB (AuthDatabase).
+ * Lưu username, email, password dưới dạng local offline.
  */
 @Entity(tableName = "users")
 public class UserEntity {
@@ -21,4 +22,7 @@ public class UserEntity {
         this.email = email;
         this.password = password;
     }
+
+    /** Room yêu cầu constructor rỗng trong vài trường hợp */
+    public UserEntity() {}
 }

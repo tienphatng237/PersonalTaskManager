@@ -4,19 +4,22 @@ import com.example.personaltaskmanager.features.authentication.data.local.entity
 import com.example.personaltaskmanager.features.authentication.data.model.User;
 
 /**
- * Mapper chuyển giữa UserEntity (Room) và User (Domain Model).
+ * Mapper chuyển giữa:
+ *  - UserEntity (Local Room)
+ *  - User (Domain Model)
  *
  * Mục tiêu:
- *  - Tách biệt domain model khỏi entity của Room
- *  - Tránh leak logic database vào domain layer
+ *  - Tách biệt domain khỏi tầng database
+ *  - Dễ mở rộng khi thêm Firebase DTO sau này
  */
 public class UserMapper {
 
     /**
-     * Convert từ Entity (lưu trong DB) thành Model dùng trong app.
+     * Convert Entity → Domain Model.
      */
     public static User toModel(UserEntity entity) {
         if (entity == null) return null;
+
         return new User(
                 entity.username,
                 entity.email,
@@ -25,10 +28,11 @@ public class UserMapper {
     }
 
     /**
-     * Convert từ Model (User) sang Entity để lưu DB.
+     * Convert Domain Model → Entity để lưu DB.
      */
     public static UserEntity toEntity(User user) {
         if (user == null) return null;
+
         return new UserEntity(
                 user.username,
                 user.email,

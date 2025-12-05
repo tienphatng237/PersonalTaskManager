@@ -10,11 +10,9 @@ import com.example.personaltaskmanager.features.authentication.data.local.dao.Us
 import com.example.personaltaskmanager.features.authentication.data.local.entity.UserEntity;
 
 /**
- * Room Database dành riêng cho chức năng Authentication.
- * Không dùng chung Database với các feature khác.
- *
- * Sử dụng Singleton để đảm bảo chỉ tạo 1 instance duy nhất trong toàn ứng dụng,
- * giúp tối ưu bộ nhớ và tránh rủi ro rò rỉ kết nối đến database.
+ * Room Database dành riêng cho Authentication.
+ * - Lưu user offline: login, register, auto-login.
+ * - Không chia sẻ với các module khác.
  */
 @Database(
         entities = {UserEntity.class},
@@ -23,15 +21,12 @@ import com.example.personaltaskmanager.features.authentication.data.local.entity
 )
 public abstract class AuthDatabase extends RoomDatabase {
 
-    // Instance duy nhất của AuthDatabase (Singleton)
     private static volatile AuthDatabase INSTANCE;
 
-    // Trả về DAO để thao tác với bảng User
     public abstract UserDao userDao();
 
     /**
-     * Lấy instance của Database.
-     * Dùng cơ chế Double-Check Locking để thread-safe và tối ưu hiệu năng.
+     * Singleton instance — thread-safe double-check locking.
      */
     public static AuthDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -40,12 +35,10 @@ public abstract class AuthDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(
                                     context.getApplicationContext(),
                                     AuthDatabase.class,
-                                    "auth_db" // Tên file database
+                                    "auth_db"
                             )
-                            // Xóa & tạo mới DB nếu có thay đổi version — phù hợp với bài lab
                             .fallbackToDestructiveMigration()
-                            // Không cho truy cập DB trên main thread (an toàn hơn)
-                            .allowMainThreadQueries()   // ⚠ Giữ lại nếu bạn muốn giống với TaskManager
+                            .allowMainThreadQueries()   // ⚠ Giữ nguyên theo yêu cầu
                             .build();
                 }
             }
