@@ -2,48 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/layout_task_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#FFFFFF"
-    tools:context=".features.task_manager.screens.TaskDetailActivity">
+    android:background="#FFFFFF">
 
-    <!-- BUTTON BACK -->
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:src="@drawable/feature_task_manager_ic_back"
-        android:contentDescription="Quay lại"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <!-- HEADER -->
-    <TextView
-        android:id="@+id/tv_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chi tiết công việc"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/btn_back"
-        app:layout_constraintTop_toTopOf="@id/btn_back"
-        app:layout_constraintBottom_toBottomOf="@id/btn_back"/>
-
-    <!-- TÊN CÔNG VIỆC -->
+    <!-- INPUT – Tên công việc -->
     <EditText
         android:id="@+id/edt_task_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:hint="Tên công việc"
         android:padding="12dp"
+        android:layout_marginTop="8dp"
         android:background="@android:drawable/editbox_background_normal"
-        app:layout_constraintTop_toBottomOf="@id/tv_header"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -76,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- NÚT LƯU -->
+    <!-- BUTTON SAVE -->
     <Button
         android:id="@+id/btn_save_task"
         android:layout_width="0dp"

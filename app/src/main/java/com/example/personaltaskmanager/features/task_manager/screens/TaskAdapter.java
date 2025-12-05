@@ -28,9 +28,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     private List<Task> taskList = new ArrayList<>();
 
-    private OnTaskClickListener listener;
-    private OnTaskDeleteListener deleteListener;
-    private OnTaskToggleListener toggleListener;
+    private final OnTaskClickListener listener;
+    private final OnTaskDeleteListener deleteListener;
+    private final OnTaskToggleListener toggleListener;
 
     public interface OnTaskClickListener {
         void onTaskClick(Task task);
@@ -54,6 +54,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         this.toggleListener = toggleListener;
     }
 
+    /** Cập nhật danh sách */
     public void setData(List<Task> tasks) {
         this.taskList = tasks;
         notifyDataSetChanged();
@@ -71,19 +72,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = taskList.get(position);
 
+        // Title + Deadline
         holder.textTitle.setText(task.getTitle());
-
-        // HIỂN THỊ DEADLINE
         holder.textDeadline.setText(DateUtils.formatDate(task.getDeadline()));
 
-        // NGĂN LISTENER LẶP
+        // NGĂN LẶP LISTENER
         holder.checkboxTask.setOnCheckedChangeListener(null);
         holder.checkboxTask.setChecked(task.isCompleted());
 
-        // STYLE COMPLETED
+        // Style khi completed
         applyCompletedStyle(holder, task.isCompleted());
 
-        // CLICK → DETAIL
+        // CLICK ITEM → mở Workspace (thông qua callback của TaskListActivity)
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onTaskClick(task);
         });
@@ -104,6 +104,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return taskList.size();
     }
 
+    /** Style completed / not completed */
     private void applyCompletedStyle(TaskViewHolder holder, boolean completed) {
         if (completed) {
             holder.textTitle.setPaintFlags(
@@ -117,8 +118,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             holder.checkboxTask.setButtonTintList(ColorStateList.valueOf(doneColor));
         } else {
             holder.textTitle.setPaintFlags(
-                    holder.textTitle.getPaintFlags() &
-                            (~Paint.STRIKE_THRU_TEXT_FLAG)
+                    holder.textTitle.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
             holder.textTitle.setAlpha(1f);
             holder.textDeadline.setAlpha(1f);
@@ -129,6 +129,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
     }
 
+    /** Holder */
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgTask;

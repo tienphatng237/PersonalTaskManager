@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.personaltaskmanager.R
 import com.example.personaltaskmanager.features.task_manager.data.model.Task
 import com.example.personaltaskmanager.features.task_manager.viewmodel.TaskViewModel
+import com.example.personaltaskmanager.features.task_manager.screens.workspace.TaskWorkspaceActivity
 
 class TaskListFragment : Fragment() {
 
@@ -57,15 +58,14 @@ class TaskListFragment : Fragment() {
 
     private fun setupRecycler() {
         adapter = TaskAdapter(
-            { task -> openEditTask(task) },                  // click item
-            { task -> viewModel.deleteTask(task) },          // delete
-            { task, done -> viewModel.toggleCompleted(task, done) } // checkbox toggle
+            { task -> openEditTask(task) },
+            { task -> viewModel.deleteTask(task) },
+            { task, done -> viewModel.toggleCompleted(task, done) }
         )
 
         rvTasks.layoutManager = LinearLayoutManager(requireContext())
         rvTasks.adapter = adapter
     }
-
 
     private fun openAddTask() {
         val intent = Intent(requireContext(), TaskDetailActivity::class.java)
@@ -73,16 +73,8 @@ class TaskListFragment : Fragment() {
     }
 
     private fun openEditTask(task: Task) {
-        val intent = Intent(requireContext(), TaskDetailActivity::class.java)
+        val intent = Intent(requireContext(), TaskWorkspaceActivity::class.java)
         intent.putExtra("task_id", task.id)
-        startActivityForResult(intent, REQUEST_ADD_TASK)
-    }
-
-    @Deprecated("Deprecated")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_ADD_TASK && resultCode == Activity.RESULT_OK) {
-            // LiveData tự update, không cần reload
-        }
+        startActivity(intent)
     }
 }

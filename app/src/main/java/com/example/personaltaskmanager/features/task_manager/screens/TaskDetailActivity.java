@@ -45,21 +45,28 @@ public class TaskDetailActivity extends AppCompatActivity {
         setContentView(R.layout.feature_task_manager_detail);
 
         setLightStatusBar();
+        initViews();
 
-        // Ánh xạ view
+        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
+        loadTaskIfEditMode();
+        setupListeners();
+    }
+
+    private void initViews() {
         edtTitle = findViewById(R.id.edt_task_title);
         edtDescription = findViewById(R.id.edt_task_description);
         edtDate = findViewById(R.id.edt_task_date);
         btnSave = findViewById(R.id.btn_save_task);
         btnBack = findViewById(R.id.btn_back);
+    }
 
-        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-
-        // EDIT MODE
+    private void loadTaskIfEditMode() {
         taskId = getIntent().getIntExtra("task_id", -1);
 
         if (taskId != -1) {
             currentTask = viewModel.getTaskById(taskId);
+
             if (currentTask != null) {
                 edtTitle.setText(currentTask.getTitle());
                 edtDescription.setText(currentTask.getDescription());
@@ -70,14 +77,13 @@ public class TaskDetailActivity extends AppCompatActivity {
                 btnSave.setText("Cập nhật công việc");
             }
         }
+    }
 
-        // BACK
+    private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
 
-        // ⭐ NEW: DatePicker
         edtDate.setOnClickListener(v -> openDatePicker());
 
-        // SAVE
         btnSave.setOnClickListener(v -> saveTask());
     }
 
@@ -87,7 +93,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         DatePickerDialog dialog = new DatePickerDialog(
                 this,
-                R.style.TaskManagerDatePickerTheme,   // ✔ dùng theme riêng
+                R.style.TaskManagerDatePickerTheme,
                 (view, year, month, day) -> {
                     Calendar c = Calendar.getInstance();
                     c.set(year, month, day, 0, 0, 0);
@@ -101,7 +107,6 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
 
     private void saveTask() {
         String title = edtTitle.getText().toString().trim();
