@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Màu dành riêng cho Task Manager -->
+    <color name="task_icon_bg">#C7F9F7</color>
 
-    <!-- Nền item task -->
-    <color name="task_card_bg">@color/cardBackground</color>
-
-    <!-- Icon placeholder nền -->
-    <color name="task_icon_bg">#E8F0FF</color> <!-- nhẹ như ToDoApp cũ -->
-
-    <!-- Icon màu chính -->
     <color name="task_icon_tint">@color/colorPrimary</color>
 
-    <!-- Nút delete -->
     <color name="task_delete_tint">@color/colorPrimary</color>
 
-    <!-- Checkbox khi chưa hoàn thành -->
     <color name="task_checkbox_tint">@color/colorPrimary</color>
 
-    <!-- Checkbox khi đã hoàn thành -->
-    <color name="task_checkbox_done_tint">#1AEFB3</color>  <!-- xanh lá -->
+    <color name="task_checkbox_done_tint">@color/colorPrimaryDark</color>
 
     <color name="deadline_today">#2196F3</color>
     <color name="deadline_overdue">#EF5350</color>
