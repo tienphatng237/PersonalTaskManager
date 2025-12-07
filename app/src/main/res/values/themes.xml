@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.PersonalTaskManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Theme.PersonalTaskManager" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- Luôn chạy Light Mode, không dùng Dark Mode -->
+        <item name="android:forceDarkAllowed">false</item>
+
+        <!-- Status bar trắng, icon tối -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Màu nền app -->
+        <item name="android:colorBackground">@color/white</item>
+
     </style>
 
-    <style name="Theme.PersonalTaskManager" parent="Base.Theme.PersonalTaskManager" />
 </resources>

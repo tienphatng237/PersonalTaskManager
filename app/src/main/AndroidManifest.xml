@@ -12,15 +12,79 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PersonalTaskManager"
         tools:targetApi="31">
+
+        <!-- ========================================================= -->
+        <!--  MAIN ENTRY — MainActivity = nơi check login              -->
+        <!-- ========================================================= -->
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <!-- Only one LAUNCHER allowed -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
+
+        <!-- ========================================================= -->
+        <!--  AUTHENTICATION MODULE                                    -->
+        <!-- ========================================================= -->
+        <activity
+            android:name=".features.authentication.screens.AuthSplashActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".features.authentication.screens.LoginActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".features.authentication.screens.RegisterActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".features.authentication.screens.ForgotPasswordActivity"
+            android:exported="true"/>
+
+
+        <!-- ========================================================= -->
+        <!--  NAVIGATION + TASK MANAGER MODULE                         -->
+        <!-- ========================================================= -->
+        <activity
+            android:name=".features.navigation.NavigationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.PersonalTaskManager"/>
+
+        <activity
+            android:name=".features.task_manager.screens.TaskManagerMainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TaskManager"/>
+
+        <activity
+            android:name=".features.task_manager.screens.TaskListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TaskManager"/>
+
+        <activity
+            android:name=".features.task_manager.screens.TaskDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TaskManager"/>
+
+        <!-- WORKSPACE ACTIVITY (bắt buộc phải có) -->
+        <activity
+            android:name=".features.task_manager.screens.workspace.TaskWorkspaceActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TaskManager"/>
+
+
+        <!-- ========================================================= -->
+        <!--  CALENDAR EVENTS MODULE                                   -->
+        <!-- ========================================================= -->
+        <activity
+            android:name=".features.calendar_events.screens.CalendarMonthActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

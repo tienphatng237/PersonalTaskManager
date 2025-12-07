@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        // Kho chính cho Android & Google plugins
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -7,10 +8,13 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
-        mavenCentral()
+
+        // Kho cho Kotlin plugin & Compose
         gradlePluginPortal()
+        mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -21,4 +25,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "PersonalTaskManager"
 include(":app")
- 
