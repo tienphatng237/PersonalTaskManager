@@ -19,13 +19,16 @@ public class BlockDragCallback extends ItemTouchHelper.Callback {
     private final List<NotionBlock> blocks;
     private final NotionBlockAdapter adapter;
     private final Vibrator vibrator;
+    private final MoveHandler handler;
 
     public BlockDragCallback(List<NotionBlock> blocks,
                              NotionBlockAdapter adapter,
-                             Vibrator vibrator) {
+                             Vibrator vibrator,
+                             MoveHandler handler) {
         this.blocks = blocks;
         this.adapter = adapter;
         this.vibrator = vibrator;
+        this.handler = handler;
     }
 
     @Override
@@ -59,6 +62,8 @@ public class BlockDragCallback extends ItemTouchHelper.Callback {
         Collections.swap(blocks, p1, p2);
         adapter.notifyItemMoved(p1, p2);
 
+        if (handler != null) handler.onItemMove(p1, p2);
+
         return true;
     }
 
@@ -76,8 +81,8 @@ public class BlockDragCallback extends ItemTouchHelper.Callback {
             if (vibrator != null) vibrator.vibrate(12);
 
             View item = viewHolder.itemView;
-            item.setElevation(20f);
 
+            item.setElevation(20f);
             item.animate()
                     .scaleX(1.05f)
                     .scaleY(1.05f)
@@ -99,8 +104,10 @@ public class BlockDragCallback extends ItemTouchHelper.Callback {
                 .scaleY(1f)
                 .setDuration(150)
                 .start();
-
         item.setElevation(0f);
+
+        // Báo cho Activity biết user đã thả block
+        if (handler != null) handler.onItemDrop();
     }
 
     @Override

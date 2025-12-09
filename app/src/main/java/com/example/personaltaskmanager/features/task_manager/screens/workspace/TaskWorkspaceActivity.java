@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class TaskWorkspaceActivity extends AppCompatActivity {
+public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHandler {
 
     private RecyclerView rvWorkspace;
     private Chip btnAddParagraph, btnAddTodo, btnAddBullet, btnAddDivider, btnAddFile;
@@ -96,10 +96,12 @@ public class TaskWorkspaceActivity extends AppCompatActivity {
 
         rvWorkspace.setAdapter(adapter);
 
-        // ⭐ DRAG & DROP + HAPTIC + SCALE + SHADOW
+        // ⭐ Drag–drop + Haptic
         Vibrator vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
         ItemTouchHelper dragHelper =
-                new ItemTouchHelper(new BlockDragCallback(blocks, adapter, vib));
+                new ItemTouchHelper(new BlockDragCallback(blocks, adapter, vib, this));
+
         dragHelper.attachToRecyclerView(rvWorkspace);
     }
 
@@ -301,5 +303,20 @@ public class TaskWorkspaceActivity extends AppCompatActivity {
                                 .start()
                 , 1700
         );
+    }
+
+    // ============================================================
+    //  MOVE HANDLER IMPLEMENTATION
+    // ============================================================
+
+    @Override
+    public void onItemMove(int fromPos, int toPos) {
+        // Swap đã được xử lý trong BlockDragCallback — không cần xử lý thêm
+    }
+
+    @Override
+    public void onItemDrop() {
+        // Lưu thứ tự block ngay khi thả
+        save();
     }
 }
