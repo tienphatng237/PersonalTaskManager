@@ -74,6 +74,7 @@
 
 
 
+
     <!-- TOOLBAR WITH CHIPS -->
     <HorizontalScrollView
         android:id="@+id/scroll_layout_tools"
@@ -138,6 +139,7 @@
                 android:id="@+id/btn_add_divider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Add divider"
                 android:textColor="@color/task_icon_tint"
                 app:chipBackgroundColor="@color/white"
@@ -145,8 +147,23 @@
                 app:chipStrokeWidth="1dp"
                 app:chipCornerRadius="12dp"/>
 
+            <!-- ⭐ NEW: Add File -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/btn_add_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add file"
+                android:textColor="@color/task_icon_tint"
+                android:layout_marginEnd="8dp"
+                app:chipBackgroundColor="@color/white"
+                app:chipStrokeColor="@color/task_icon_tint"
+                app:chipStrokeWidth="1dp"
+                app:chipCornerRadius="12dp"/>
+
         </LinearLayout>
     </HorizontalScrollView>
+
+
 
 
 

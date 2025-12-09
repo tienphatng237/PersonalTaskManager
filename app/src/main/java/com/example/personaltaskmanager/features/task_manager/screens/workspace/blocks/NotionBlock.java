@@ -6,13 +6,18 @@ public class NotionBlock {
         PARAGRAPH,
         TODO,
         BULLET,
-        DIVIDER
+        DIVIDER,
+        FILE   // thêm block file
     }
 
     public String id;
     public Type type;
     public String text;
     public boolean isChecked;
+
+    // thêm thuộc tính cho file
+    public String fileUri;     // content://...
+    public String fileName;    // tên file hiển thị
 
     public NotionBlock(String id, Type type, String text, boolean isChecked) {
         this.id = id;

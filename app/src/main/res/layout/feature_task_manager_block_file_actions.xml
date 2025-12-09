@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/action_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="View"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/action_copy_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="Copy link"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/action_duplicate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="Duplicate"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/action_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="Delete"
+        android:textSize="16sp"
+        android:textColor="#D32F2F" />
+
+</LinearLayout>

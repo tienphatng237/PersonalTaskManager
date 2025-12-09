@@ -72,11 +72,17 @@ public class TaskViewModel extends AndroidViewModel {
 
     /**
      * UPDATE Task + deadline
+     * ❗ Fix lỗi: phải giữ nguyên notesJson và tablesJson (để không bị mất block file)
      */
     public void updateTask(Task task, String newTitle, String newDesc, long deadline) {
+
         task.setTitle(newTitle);
         task.setDescription(newDesc);
         task.setDeadline(deadline);
+
+        // notesJson đã được set từ Activity trước khi gọi updateTask()
+        // không được reset hoặc bỏ qua
+
         repository.updateTask(task);
     }
 
