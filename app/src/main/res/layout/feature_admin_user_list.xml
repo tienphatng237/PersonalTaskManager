@@ -1,20 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/backgroundColor">
 
+    <!-- TITLE -->
     <TextView
-        android:text="User Management Panel"
-        android:textSize="20sp"
+        android:id="@+id/tv_admin_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Quản lý Người dùng"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:padding="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textColor="@color/textPrimary"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_users"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+    <!-- SEARCH USER CARD -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_get_user"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/cardBackground"
+        app:strokeWidth="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_admin_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tìm kiếm người dùng theo ID"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/textPrimary"
+                android:paddingBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập User ID"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_user_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/textPrimary" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_get_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="GET USER BY ID"
+                android:layout_marginTop="12dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- GET ALL USERS BUTTON -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_get_all"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="GET ALL USERS"
+        android:layout_marginTop="16dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/card_get_user"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- NAVIGATE TO ADD USER SCREEN -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_goto_add_user"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="THÊM NGƯỜI DÙNG"
+        android:layout_marginTop="12dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/btn_get_all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- RESULT LABEL -->
+    <TextView
+        android:id="@+id/tv_result_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="KẾT QUẢ:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/textPrimary"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_goto_add_user"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- RESULT OUTPUT -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:padding="4dp"
+        android:background="@color/colorBackground"
+        app:layout_constraintTop_toBottomOf="@id/tv_result_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:padding="8dp"
+            android:textColor="@color/textPrimary"
+            tools:text="Kết quả sẽ hiển thị tại đây" />
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

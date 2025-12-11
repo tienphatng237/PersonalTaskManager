@@ -6,10 +6,13 @@
     <!-- PERMISSIONS — tránh crash khi chọn file / mở file         -->
     <!-- ========================================================= -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+
+    <!-- Storage (Android 12 trở xuống) -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-    <!-- Android 13+ (API 33 trở lên) -->
+    <!-- Android 13+ permissions -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
@@ -40,7 +43,7 @@
         </provider>
 
         <!-- ========================================================= -->
-        <!--  MAIN ENTRY — MainActivity = nơi check login              -->
+        <!--  MAIN ENTRY — MainActivity check AutoLogin               -->
         <!-- ========================================================= -->
         <activity
             android:name=".ui.main.MainActivity"
@@ -58,56 +61,62 @@
         <!-- ========================================================= -->
         <activity
             android:name=".features.authentication.screens.AuthSplashActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity
             android:name=".features.authentication.screens.LoginActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity
             android:name=".features.authentication.screens.RegisterActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity
             android:name=".features.authentication.screens.ForgotPasswordActivity"
-            android:exported="true"/>
-
+            android:exported="true" />
 
         <!-- ========================================================= -->
-        <!--  NAVIGATION + TASK MANAGER MODULE                         -->
+        <!--  NAVIGATION ACTIVITY (Fragment container)                -->
         <!-- ========================================================= -->
         <activity
             android:name=".features.navigation.NavigationActivity"
             android:exported="true"
-            android:theme="@style/Theme.PersonalTaskManager"/>
+            android:theme="@style/Theme.PersonalTaskManager" />
 
+        <!-- ========================================================= -->
+        <!--  TASK MANAGER MODULE                                    -->
+        <!-- ========================================================= -->
         <activity
             android:name=".features.task_manager.screens.TaskManagerMainActivity"
             android:exported="false"
-            android:theme="@style/Theme.TaskManager"/>
+            android:theme="@style/Theme.TaskManager" />
 
         <activity
             android:name=".features.task_manager.screens.TaskListActivity"
             android:exported="false"
-            android:theme="@style/Theme.TaskManager"/>
+            android:theme="@style/Theme.TaskManager" />
 
         <activity
             android:name=".features.task_manager.screens.TaskDetailActivity"
             android:exported="false"
-            android:theme="@style/Theme.TaskManager"/>
+            android:theme="@style/Theme.TaskManager" />
 
         <activity
             android:name=".features.task_manager.screens.workspace.TaskWorkspaceActivity"
             android:exported="false"
-            android:theme="@style/Theme.TaskManager"/>
-
+            android:theme="@style/Theme.TaskManager" />
 
         <!-- ========================================================= -->
         <!--  CALENDAR EVENTS MODULE                                   -->
         <!-- ========================================================= -->
         <activity
             android:name=".features.calendar_events.screens.CalendarMonthActivity"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <!-- ========================================================= -->
+        <!--  ADMIN MODULE (Fragment -> không cần khai báo)           -->
+        <!-- ========================================================= -->
+        <!-- AdminFragment KHÔNG cần thêm ở đây                       -->
 
     </application>
 
