@@ -7,6 +7,8 @@ import androidx.room.Query;
 
 import com.example.personaltaskmanager.features.authentication.data.local.entity.UserEntity;
 
+import java.util.List;
+
 /**
  * DAO xử lý CRUD cho bảng Users trong local DB (Room).
  * Dùng cho Login, Register, AutoLogin, Logout.
@@ -44,4 +46,11 @@ public interface UserDao {
      */
     @Query("DELETE FROM users")
     void deleteAll();
+
+    // -----------------------------
+    // THÊM CHO ADMIN PANEL
+    // Lấy toàn bộ user trong DB.
+    // -----------------------------
+    @Query("SELECT * FROM users")
+    List<UserEntity> getAllUsers();
 }

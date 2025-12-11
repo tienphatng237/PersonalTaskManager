@@ -2,12 +2,16 @@ package com.example.personaltaskmanager.features.authentication.data.local;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.personaltaskmanager.features.authentication.data.local.dao.UserDao;
 import com.example.personaltaskmanager.features.authentication.data.local.entity.UserEntity;
+
+import java.util.concurrent.Executors;
 
 /**
  * Room Database dành riêng cho Authentication.
@@ -16,7 +20,7 @@ import com.example.personaltaskmanager.features.authentication.data.local.entity
  */
 @Database(
         entities = {UserEntity.class},
-        version = 1,
+        version = 2,      // 🔥 nhớ tăng version (bắt buộc)
         exportSchema = false
 )
 public abstract class AuthDatabase extends RoomDatabase {
@@ -39,6 +43,30 @@ public abstract class AuthDatabase extends RoomDatabase {
                             )
                             .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()   // ⚠ Giữ nguyên theo yêu cầu
+
+                            // =================================================
+                            // SEED ADMIN USER (CHỈ CHẠY LẦN ĐẦU TẠO DATABASE)
+                            // =================================================
+                            .addCallback(new Callback() {
+                                @Override
+                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                    super.onCreate(db);
+
+                                    Executors.newSingleThreadExecutor().execute(() -> {
+                                        UserEntity admin = new UserEntity();
+                                        admin.username = "admin";
+                                        admin.email = "admin@gmail.com";
+                                        admin.password = "123456";
+                                        admin.role = "admin";
+
+                                        getInstance(context)
+                                                .userDao()
+                                                .insertUser(admin);
+                                    });
+                                }
+                            })
+
+                            // =================================================
                             .build();
                 }
             }

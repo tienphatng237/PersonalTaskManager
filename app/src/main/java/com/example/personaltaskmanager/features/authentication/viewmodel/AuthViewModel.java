@@ -33,9 +33,11 @@ public class AuthViewModel extends ViewModel {
         forgotUseCase = new ForgotPasswordUseCase();
     }
 
-    public boolean login(String username, String password) {
+    // ---- CHỈ SỬA HÀM NÀY ----
+    public User login(String username, String password) {
         return loginUseCase.execute(username, password);
     }
+    // -------------------------
 
     public boolean register(User user) {
         return registerUseCase.execute(user);

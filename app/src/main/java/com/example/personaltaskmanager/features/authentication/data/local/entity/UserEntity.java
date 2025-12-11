@@ -17,10 +17,14 @@ public class UserEntity {
     public String email;
     public String password;
 
+    // thêm — không sửa comment
+    public String role = "user";
+
     public UserEntity(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = "user";
     }
 
     /** Room yêu cầu constructor rỗng trong vài trường hợp */

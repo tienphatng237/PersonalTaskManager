@@ -35,19 +35,19 @@ public class AuthRepository {
     /**
      * LOGIN LOCAL
      */
-    public boolean login(String username, String password) {
+    public User login(String username, String password) {
 
         UserEntity u = userDao.getUserByUsername(username);
 
-        if (u == null) return false;
-        if (!u.password.equals(password)) return false;
+        if (u == null) return null;
+        if (!u.password.equals(password)) return null;
 
-        // Save session
         prefs.edit()
                 .putString("current_user", username)
                 .apply();
 
-        return true;
+        // không đổi logic, chỉ trả User
+        return UserMapper.toModel(u);
     }
 
     /**

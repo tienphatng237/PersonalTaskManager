@@ -15,6 +15,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.personaltaskmanager.R;
+import com.example.personaltaskmanager.features.authentication.data.model.User;
 import com.example.personaltaskmanager.features.authentication.data.repository.AuthRepository;
 import com.example.personaltaskmanager.features.navigation.NavigationActivity;
 
@@ -81,17 +82,22 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            boolean ok = repo.login(username, password);
+            // --- CHỈ SỬA 3 DÒNG NÀY ---
+            User user = repo.login(username, password);
 
-            if (!ok) {
+            if (user == null) {
                 Toast.makeText(this,
                         "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // ---------------------------
 
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-            startActivity(new Intent(this, NavigationActivity.class));
+            // thêm role vào Intent
+            Intent intent = new Intent(this, NavigationActivity.class);
+            intent.putExtra("role", user.role);
+            startActivity(intent);
             finish();
         });
 
