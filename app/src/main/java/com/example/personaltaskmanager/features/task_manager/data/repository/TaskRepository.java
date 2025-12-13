@@ -37,29 +37,23 @@ public class TaskRepository {
 
     public void addTask(Task task) {
         task.setUserId(getCurrentUserId());
-
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            dao.insertTask(task);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> dao.insertTask(task));
     }
 
     public void updateTask(Task task) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            dao.updateTask(task);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> dao.updateTask(task));
     }
 
     public void deleteTask(Task task) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            dao.deleteTask(task);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> dao.deleteTask(task));
     }
 
     public LiveData<List<Task>> getTasksByDate(long start, long end) {
         return dao.getTasksByDate(getCurrentUserId(), start, end);
     }
 
-    public Task getTaskById(int taskId) {
+    // SỬA: trả LiveData
+    public LiveData<Task> getTaskById(int taskId) {
         return dao.getTaskById(taskId);
     }
 }

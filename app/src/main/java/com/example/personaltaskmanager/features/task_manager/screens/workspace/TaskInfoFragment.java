@@ -73,18 +73,21 @@ public class TaskInfoFragment extends Fragment {
 
         // Nếu đang Edit task
         if (taskId != -1) {
-            currentTask = viewModel.getTaskById(taskId);
+            viewModel.getTaskById(taskId).observe(getViewLifecycleOwner(), task -> {
+                if (task == null) return;
 
-            if (currentTask != null) {
-                edtTitle.setText(currentTask.getTitle());
-                edtDesc.setText(currentTask.getDescription());
+                currentTask = task;
 
-                selectedDeadline = currentTask.getDeadline();
+                edtTitle.setText(task.getTitle());
+                edtDesc.setText(task.getDescription());
+
+                selectedDeadline = task.getDeadline();
                 edtDate.setText(DateUtils.formatDate(selectedDeadline));
 
                 btnSave.setText("Cập nhật công việc");
-            }
+            });
         }
+
 
         edtDate.setOnClickListener(vx -> openDatePicker());
         btnSave.setOnClickListener(vx -> saveTask());

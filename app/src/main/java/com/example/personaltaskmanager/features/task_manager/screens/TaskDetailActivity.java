@@ -65,17 +65,19 @@ public class TaskDetailActivity extends AppCompatActivity {
         taskId = getIntent().getIntExtra("task_id", -1);
 
         if (taskId != -1) {
-            currentTask = viewModel.getTaskById(taskId);
+            viewModel.getTaskById(taskId).observe(this, task -> {
+                if (task == null) return;
 
-            if (currentTask != null) {
-                edtTitle.setText(currentTask.getTitle());
-                edtDescription.setText(currentTask.getDescription());
+                currentTask = task;
 
-                selectedDeadline = currentTask.getDeadline();
+                edtTitle.setText(task.getTitle());
+                edtDescription.setText(task.getDescription());
+
+                selectedDeadline = task.getDeadline();
                 edtDate.setText(DateUtils.formatDate(selectedDeadline));
 
                 btnSave.setText("Cập nhật công việc");
-            }
+            });
         }
     }
 

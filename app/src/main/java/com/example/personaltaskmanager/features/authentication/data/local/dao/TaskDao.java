@@ -1,1 +1,0 @@
-package com.example.personaltaskmanager.features.authentication.data.local.dao; public interface TaskDao {}

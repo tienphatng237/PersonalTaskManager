@@ -21,8 +21,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE userId = :userId ORDER BY id DESC")
     LiveData<List<Task>> getAllTasks(int userId);
 
+    // SỬA: trả về LiveData để tránh query main thread
     @Query("SELECT * FROM tasks WHERE id = :taskId LIMIT 1")
-    Task getTaskById(int taskId);
+    LiveData<Task> getTaskById(int taskId);
 
     @Insert
     long insertTask(Task task);
