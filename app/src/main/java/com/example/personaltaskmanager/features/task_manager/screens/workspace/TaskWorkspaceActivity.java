@@ -2,15 +2,11 @@ package com.example.personaltaskmanager.features.task_manager.screens.workspace;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.OpenableColumns;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -27,7 +23,6 @@ import com.example.personaltaskmanager.features.task_manager.screens.workspace.b
 import com.example.personaltaskmanager.features.task_manager.screens.workspace.blocks.NotionBlockParser;
 import com.example.personaltaskmanager.features.task_manager.viewmodel.TaskViewModel;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,8 +89,7 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
         tvTaskTitle = findViewById(R.id.tv_task_title);
         tvTaskDeadline = findViewById(R.id.tv_task_deadline);
 
-        View topBar = findViewById(R.id.card_top_bar);
-        topBar.setOnClickListener(v -> openTaskDetail());
+        findViewById(R.id.card_top_bar).setOnClickListener(v -> openTaskDetail());
     }
 
     private void initRecycler() {
@@ -147,14 +141,42 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
     private void pickFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, REQ_PICK_FILE);
     }
 
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+
+        // ===== XỬ LÝ PICK FILE (FIX CHÍNH) =====
+        if (req == REQ_PICK_FILE && res == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri == null) return;
+
+            String fileName = "File";
+            Cursor c = getContentResolver().query(uri, null, null, null, null);
+            if (c != null) {
+                int nameIndex = c.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (c.moveToFirst() && nameIndex >= 0) {
+                    fileName = c.getString(nameIndex);
+                }
+                c.close();
+            }
+
+            NotionBlock fileBlock =
+                    new NotionBlock(UUID.randomUUID().toString(), NotionBlock.Type.FILE, "", false);
+            fileBlock.fileUri = uri.toString();
+            fileBlock.fileName = fileName;
+
+            blocks.add(fileBlock);
+            adapter.notifyItemInserted(blocks.size() - 1);
+            rvWorkspace.scrollToPosition(blocks.size() - 1);
+            return;
+        }
+
         if (req == REQ_EDIT_TASK && res == RESULT_OK) {
-            showIOSPopup("Đã cập nhật công việc");
+            // giữ nguyên
         }
     }
 
@@ -167,10 +189,6 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
         Intent i = new Intent(this, TaskDetailActivity.class);
         i.putExtra("task_id", taskId);
         startActivityForResult(i, REQ_EDIT_TASK);
-    }
-
-    private void showIOSPopup(String message) {
-        // Giữ nguyên code cũ
     }
 
     @Override public void onItemMove(int fromPos, int toPos) {}
