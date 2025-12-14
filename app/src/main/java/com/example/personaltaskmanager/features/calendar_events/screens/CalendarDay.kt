@@ -6,5 +6,6 @@ data class CalendarDay(
     val day: Int,
     val isCurrentMonth: Boolean,
     val date: LocalDate,
-    val isValid: Boolean = true    // NEW FIELD: xác định ô có phải là ngày thật không
+    val isValid: Boolean = true,
+    var hasEvent: Boolean = false
 )

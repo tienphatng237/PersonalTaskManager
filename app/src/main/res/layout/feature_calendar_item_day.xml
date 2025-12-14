@@ -24,4 +24,14 @@
         android:textStyle="bold"
         android:textColor="@color/calendar_text_default" />
 
+    <!-- Dấu chấm báo có việc / công việc -->
+    <View
+        android:id="@+id/view_event_dot"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/bg_calendar_event_dot"
+        android:visibility="gone" />
+
 </FrameLayout>

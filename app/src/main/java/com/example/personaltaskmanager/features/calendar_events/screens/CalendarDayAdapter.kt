@@ -10,9 +10,17 @@ import java.time.LocalDate
 
 class CalendarDayAdapter(
     private val days: List<CalendarDay>,
-    private val selectedDate: LocalDate,
+    selectedDate: LocalDate,
     private val onClick: (CalendarDay) -> Unit
 ) : RecyclerView.Adapter<CalendarDayAdapter.DayViewHolder>() {
+
+    // ===== STATE =====
+    private var selectedDate: LocalDate = selectedDate
+
+    fun updateSelectedDate(date: LocalDate) {
+        selectedDate = date
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -24,15 +32,17 @@ class CalendarDayAdapter(
         val day = days[position]
         holder.bind(day, selectedDate)
         holder.itemView.setOnClickListener {
-            if (day.isValid) onClick(day)   // tránh click vào ô padding
+            if (day.isValid) onClick(day)
         }
     }
 
     override fun getItemCount(): Int = days.size
 
     class DayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         private val tvDay: TextView = itemView.findViewById(R.id.tv_calendar_day)
         private val bgCircle: View = itemView.findViewById(R.id.bg_circle)
+        private val dot: View = itemView.findViewById(R.id.view_event_dot)
 
         fun bind(day: CalendarDay, selectedDate: LocalDate) {
             val ctx = itemView.context
@@ -41,11 +51,17 @@ class CalendarDayAdapter(
             if (!day.isValid) {
                 tvDay.text = ""
                 bgCircle.visibility = View.INVISIBLE
+                dot.visibility = View.GONE
                 return
             }
 
             tvDay.text = day.date.dayOfMonth.toString()
             bgCircle.visibility = View.VISIBLE
+
+            // ===== DOT: có task / todo =====
+            dot.visibility =
+                if (day.hasEvent && day.isCurrentMonth) View.VISIBLE
+                else View.GONE
 
             when {
                 // Ngày được chọn
@@ -60,7 +76,7 @@ class CalendarDayAdapter(
                     tvDay.setTextColor(ctx.getColor(R.color.calendar_text_default))
                 }
 
-                // Ngày trong tháng bình thường
+                // Ngày trong tháng
                 day.isCurrentMonth -> {
                     bgCircle.setBackgroundResource(R.drawable.bg_calendar_day_default)
                     tvDay.setTextColor(ctx.getColor(R.color.calendar_text_default))

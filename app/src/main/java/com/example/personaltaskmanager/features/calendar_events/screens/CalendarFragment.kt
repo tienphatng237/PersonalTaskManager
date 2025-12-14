@@ -39,6 +39,7 @@ import java.time.format.DateTimeFormatter
  * Phiên bản hiện tại:
  * - Calendar hiển thị task + todo con (group theo task)
  * - Có bộ lọc All / Công việc / Việc
+ * - Có dấu chấm hiển thị ngày có dữ liệu (Task / Todo)
  */
 class CalendarFragment : Fragment() {
 
@@ -60,6 +61,7 @@ class CalendarFragment : Fragment() {
     // ===== ADAPTER =====
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var todoAdapter: CalendarTodoAdapter
+    private lateinit var calendarDayAdapter: CalendarDayAdapter
 
     // ===== VIEWMODEL =====
     private lateinit var taskViewModel: TaskViewModel
@@ -191,18 +193,10 @@ class CalendarFragment : Fragment() {
         when (currentFilter) {
 
             FilterMode.ALL -> {
-                // RESET STATE trước khi show lại
                 rvTasks.clearAnimation()
                 rvTodos.clearAnimation()
-
-                rvTasks.alpha = 1f
-                rvTodos.alpha = 1f
-                rvTasks.translationY = 0f
-                rvTodos.translationY = 0f
-
                 rvTasks.visibility = View.VISIBLE
                 rvTodos.visibility = View.VISIBLE
-
                 rvTasks.startAnimation(animIn)
                 rvTodos.startAnimation(animIn)
             }
@@ -234,23 +228,50 @@ class CalendarFragment : Fragment() {
         tvMonthTitle.text = currentMonth.format(formatter)
         tvSelectedDate.text = "Công việc ngày: $selectedDate"
 
-        rvCalendar.adapter = CalendarDayAdapter(
-            days = generateCalendarDays(currentMonth),
-            selectedDate = selectedDate
-        ) { clickedDay ->
-            if (clickedDay.isCurrentMonth) {
-                selectedDate = clickedDay.date
-                tvSelectedDate.text = "Công việc ngày: $selectedDate"
-                loadMonth()
-                reloadData()
+        val startMonth =
+            currentMonth.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val endMonth =
+            currentMonth.atEndOfMonth().plusDays(1)
+                .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        taskViewModel.getTasksByDate(startMonth, endMonth)
+            .observe(viewLifecycleOwner) { tasks ->
+
+                val days = generateCalendarDays(currentMonth)
+
+                val taskDates = tasks.mapNotNull { task ->
+                    task.deadline?.let { millis ->
+                        java.time.Instant.ofEpochMilli(millis)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()
+                    }
+                }.toSet()
+
+                days.forEach { day ->
+                    day.hasEvent = taskDates.contains(day.date)
+                }
+
+                calendarDayAdapter = CalendarDayAdapter(
+                    days = days,
+                    selectedDate = selectedDate
+                ) { clickedDay ->
+                    if (clickedDay.isValid) {
+                        selectedDate = clickedDay.date
+                        tvSelectedDate.text = "Công việc ngày: $selectedDate"
+                        calendarDayAdapter.updateSelectedDate(selectedDate)
+                        reloadData()
+                    }
+                }
+
+                rvCalendar.adapter = calendarDayAdapter
             }
-        }
     }
 
     /**
      * Load task + todo con theo ngày
      */
     private fun loadTasksAndTodosOfDate(date: LocalDate) {
+
         val startMillis =
             date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val endMillis =
