@@ -8,6 +8,7 @@ import android.os.Vibrator;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,7 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
     private ImageButton btnBack;
 
     private TextView tvTaskTitle, tvTaskDeadline;
+    private ImageView imgTaskIcon;
 
     private final List<NotionBlock> blocks = new ArrayList<>();
     private NotionBlockAdapter adapter;
@@ -92,6 +94,7 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
 
         tvTaskTitle = findViewById(R.id.tv_task_title);
         tvTaskDeadline = findViewById(R.id.tv_task_deadline);
+        imgTaskIcon = findViewById(R.id.img_task_icon);
 
         findViewById(R.id.card_top_bar).setOnClickListener(v -> openTaskDetail());
     }
@@ -109,14 +112,26 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
 
     private void applyTaskInfo() {
         tvTaskTitle.setText(task.getTitle());
+
         long dl = task.getDeadline();
         if (dl > 0) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat sdf =
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             tvTaskDeadline.setText(sdf.format(dl));
         } else {
             tvTaskDeadline.setText("No deadline");
         }
+
+        // ===== IMAGE (ĐỒNG BỘ VỚI TASK ADAPTER) =====
+        if (task.getImageUri() != null && !task.getImageUri().isEmpty()) {
+            imgTaskIcon.setImageURI(Uri.parse(task.getImageUri()));
+        } else {
+            imgTaskIcon.setImageResource(
+                    R.drawable.feature_task_manager_ic_image_placeholder
+            );
+        }
     }
+
 
     private void loadBlocks() {
         blocks.clear();

@@ -77,7 +77,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.textTitle.setText(task.getTitle());
         holder.textDeadline.setText(DateUtils.formatDate(task.getDeadline()));
 
-        // ===== IMAGE (FIX CHÍNH) =====
+        // ===== IMAGE =====
         if (task.getImageUri() != null && !task.getImageUri().isEmpty()) {
             holder.imgTask.setImageURI(Uri.parse(task.getImageUri()));
         } else {
@@ -89,7 +89,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         // ===== CHECKBOX =====
         holder.checkboxTask.setOnCheckedChangeListener(null);
         holder.checkboxTask.setChecked(task.isCompleted());
-
         applyCompletedStyle(holder, task.isCompleted());
 
         // CLICK ITEM
