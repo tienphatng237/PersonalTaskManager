@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297323922880",
+    "project_id": "personaltaskmanager-dc226",
+    "storage_bucket": "personaltaskmanager-dc226.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297323922880:android:aa929deab86ecbcad53425",
+        "android_client_info": {
+          "package_name": "com.example.personaltaskmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1iRq1KXccVSWKmm_NxyFOvY16YFBh2W0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
