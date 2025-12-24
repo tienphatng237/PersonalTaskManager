@@ -13,6 +13,7 @@ import com.example.personaltaskmanager.R
 import com.example.personaltaskmanager.features.authentication.data.repository.AuthRepository // ⭐ THÊM IMPORT AuthRepository
 import com.example.personaltaskmanager.features.authentication.domain.usecase.LogoutUseCase // ⭐ THÊM IMPORT LogoutUseCase
 import com.example.personaltaskmanager.features.authentication.screens.LoginActivity // ⭐ THÊM IMPORT LoginActivity
+import com.example.personaltaskmanager.ai.GeminiApiService
 import com.example.personaltaskmanager.features.export.ExportUtils
 import com.example.personaltaskmanager.features.habit_tracker.viewmodel.HabitViewModel
 import com.example.personaltaskmanager.features.task_manager.viewmodel.TaskViewModel
@@ -199,4 +200,5 @@ class SettingsFragment : Fragment() {
             .setNegativeButton("Hủy", null)
             .show()
     }
+
 }

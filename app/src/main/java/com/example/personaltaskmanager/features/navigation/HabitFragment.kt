@@ -287,6 +287,14 @@ class HabitFragment : Fragment() {
 
         dialog.setOnShowListener {
             val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val btnNegative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            
+            // Set màu cho nút Thêm (màu primary)
+            btnPositive.setTextColor(requireContext().getColor(R.color.colorPrimary))
+            
+            // Set màu cho nút Hủy (màu text secondary)
+            btnNegative.setTextColor(requireContext().getColor(R.color.textSecondary))
+            
             btnPositive.setOnClickListener {
                 val title = edtTitle.text.toString().trim()
                 val description = edtDescription.text.toString().trim()

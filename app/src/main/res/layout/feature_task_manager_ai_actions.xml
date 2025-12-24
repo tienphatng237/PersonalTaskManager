@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp"
+    android:backgroundTint="@color/white">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="8dp">
+
+        <!-- TITLE -->
+        <TextView
+            android:id="@+id/tv_ai_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AI Assistant"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:padding="12dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/gray" />
+
+        <!-- Complete -->
+        <TextView
+            android:id="@+id/btn_ai_complete"
+            style="@style/BottomSheetActionItem"
+            android:text="✨ Hoàn thiện" />
+
+        <!-- Improve -->
+        <TextView
+            android:id="@+id/btn_ai_improve"
+            style="@style/BottomSheetActionItem"
+            android:text="📝 Cải thiện" />
+
+        <!-- Summarize -->
+        <TextView
+            android:id="@+id/btn_ai_summarize"
+            style="@style/BottomSheetActionItem"
+            android:text="📋 Tóm tắt" />
+
+        <!-- Expand -->
+        <TextView
+            android:id="@+id/btn_ai_expand"
+            style="@style/BottomSheetActionItem"
+            android:text="🔍 Mở rộng" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/gray" />
+
+        <!-- Duplicate -->
+        <TextView
+            android:id="@+id/btn_action_duplicate"
+            style="@style/BottomSheetActionItem"
+            android:text="Duplicate" />
+
+        <!-- Move -->
+        <TextView
+            android:id="@+id/btn_action_move"
+            style="@style/BottomSheetActionItem"
+            android:text="Move to" />
+
+        <!-- Delete -->
+        <TextView
+            android:id="@+id/btn_action_delete"
+            style="@style/BottomSheetActionItem"
+            android:text="Delete"
+            android:textColor="@color/red" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+

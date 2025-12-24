@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.personaltaskmanager.R;
 import com.example.personaltaskmanager.features.task_manager.data.model.Task;
+import com.example.personaltaskmanager.features.task_manager.screens.workspace.TaskWorkspaceActivity;
 import com.example.personaltaskmanager.features.task_manager.utils.DateUtils;
 import com.example.personaltaskmanager.features.task_manager.viewmodel.TaskViewModel;
 
@@ -201,6 +202,26 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         btnPickImage.setOnClickListener(v -> openGallery());
         imgTask.setOnClickListener(v -> openGallery());
+        
+        // Add workspace button if editing existing task
+        if (taskId != -1 || (taskUuid != null && !taskUuid.isEmpty())) {
+            Button btnWorkspace = findViewById(R.id.btn_open_workspace);
+            if (btnWorkspace != null) {
+                btnWorkspace.setVisibility(View.VISIBLE);
+                btnWorkspace.setOnClickListener(v -> openWorkspace());
+            }
+        }
+    }
+    
+    private void openWorkspace() {
+        Intent intent = new Intent(this, TaskWorkspaceActivity.class);
+        intent.putExtra("task_id", taskId);
+        if (taskUuid != null && !taskUuid.isEmpty()) {
+            intent.putExtra("task_uuid", taskUuid);
+        } else if (currentTask != null && currentTask.getUuid() != null) {
+            intent.putExtra("task_uuid", currentTask.getUuid());
+        }
+        startActivity(intent);
     }
 
     /**

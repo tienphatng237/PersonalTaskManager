@@ -172,41 +172,90 @@ public class TaskWorkspaceActivity extends AppCompatActivity implements MoveHand
         adapter = new NotionBlockAdapter(blocks);
         rvWorkspace.setAdapter(adapter);
 
-        // Setup file menu listener
+        // Setup menu listener - show AI menu for text blocks, file menu for file blocks
         adapter.setFileMenuListener((block, position, anchor) -> {
-            TaskFileActionBottomSheet sheet = new TaskFileActionBottomSheet(block, new TaskFileActionBottomSheet.Listener() {
-                @Override
-                public void onDelete(NotionBlock b) {
-                    blocks.remove(b);
-                    adapter.notifyItemRemoved(position);
-                    save();
-                }
+            // Show AI menu for text blocks (PARAGRAPH, TODO, BULLET)
+            if (block.type == NotionBlock.Type.PARAGRAPH 
+                    || block.type == NotionBlock.Type.TODO 
+                    || block.type == NotionBlock.Type.BULLET) {
+                
+                AIActionBottomSheet aiSheet = new AIActionBottomSheet(block, new AIActionBottomSheet.Listener() {
+                    @Override
+                    public void onTextUpdated(NotionBlock b, String newText) {
+                        b.text = newText;
+                        adapter.notifyItemChanged(position);
+                        save();
+                    }
 
-                @Override
-                public void onDuplicate(NotionBlock b) {
-                    NotionBlock copy = new NotionBlock(
-                            java.util.UUID.randomUUID().toString(),
-                            b.type,
-                            b.text,
-                            b.isChecked
-                    );
-                    copy.fileUri = b.fileUri;
-                    copy.fileName = b.fileName;
-                    copy.deadline = b.deadline;
-                    blocks.add(position + 1, copy);
-                    adapter.notifyItemInserted(position + 1);
-                    save();
-                }
+                    @Override
+                    public void onDelete(NotionBlock b) {
+                        blocks.remove(b);
+                        adapter.notifyItemRemoved(position);
+                        save();
+                    }
 
-                @Override
-                public void onMove(NotionBlock b) {
-                    MoveBlockDialog dialog = new MoveBlockDialog(b, taskId, vm, targetTaskId -> {
-                        moveBlockToTask(b, targetTaskId);
-                    });
-                    dialog.show(getSupportFragmentManager(), "MoveBlockDialog");
-                }
-            });
-            sheet.show(getSupportFragmentManager(), "FileActions");
+                    @Override
+                    public void onDuplicate(NotionBlock b) {
+                        NotionBlock copy = new NotionBlock(
+                                java.util.UUID.randomUUID().toString(),
+                                b.type,
+                                b.text,
+                                b.isChecked
+                        );
+                        copy.fileUri = b.fileUri;
+                        copy.fileName = b.fileName;
+                        copy.deadline = b.deadline;
+                        blocks.add(position + 1, copy);
+                        adapter.notifyItemInserted(position + 1);
+                        save();
+                    }
+
+                    @Override
+                    public void onMove(NotionBlock b) {
+                        MoveBlockDialog dialog = new MoveBlockDialog(b, taskId, vm, targetTaskId -> {
+                            moveBlockToTask(b, targetTaskId);
+                        });
+                        dialog.show(getSupportFragmentManager(), "MoveBlockDialog");
+                    }
+                });
+                aiSheet.show(getSupportFragmentManager(), "AIActions");
+                
+            } else {
+                // Show file menu for FILE blocks
+                TaskFileActionBottomSheet sheet = new TaskFileActionBottomSheet(block, new TaskFileActionBottomSheet.Listener() {
+                    @Override
+                    public void onDelete(NotionBlock b) {
+                        blocks.remove(b);
+                        adapter.notifyItemRemoved(position);
+                        save();
+                    }
+
+                    @Override
+                    public void onDuplicate(NotionBlock b) {
+                        NotionBlock copy = new NotionBlock(
+                                java.util.UUID.randomUUID().toString(),
+                                b.type,
+                                b.text,
+                                b.isChecked
+                        );
+                        copy.fileUri = b.fileUri;
+                        copy.fileName = b.fileName;
+                        copy.deadline = b.deadline;
+                        blocks.add(position + 1, copy);
+                        adapter.notifyItemInserted(position + 1);
+                        save();
+                    }
+
+                    @Override
+                    public void onMove(NotionBlock b) {
+                        MoveBlockDialog dialog = new MoveBlockDialog(b, taskId, vm, targetTaskId -> {
+                            moveBlockToTask(b, targetTaskId);
+                        });
+                        dialog.show(getSupportFragmentManager(), "MoveBlockDialog");
+                    }
+                });
+                sheet.show(getSupportFragmentManager(), "FileActions");
+            }
         });
 
         Vibrator vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
