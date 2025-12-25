@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+//import androidx.compose.ui.tooling.data.position
+//import androidx.compose.ui.tooling.data.position
+import androidx.core.text.color
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.personaltaskmanager.R
@@ -78,7 +81,7 @@ class DashboardFragment : Fragment() {
         gridHeatmap = view.findViewById(R.id.grid_heatmap)
         chartPriority = view.findViewById(R.id.chart_priority)
         chartTags = view.findViewById(R.id.chart_tags)
-        
+
         setupCharts()
     }
     
@@ -254,7 +257,7 @@ class DashboardFragment : Fragment() {
             updateTagsChart(tasks)
         }
     }
-    
+
     private fun updateWeeklyChart() {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
@@ -262,21 +265,21 @@ class DashboardFragment : Fragment() {
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        
+
         val entries = mutableListOf<Entry>()
         val dateFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
         val labels = mutableListOf<String>()
-        
+
         for (i in 0..6) {
             val dayStart = calendar.timeInMillis
             calendar.add(Calendar.DAY_OF_YEAR, 1)
             val dayEnd = calendar.timeInMillis - 1
-            
+
             // Get completed tasks for this day
             taskViewModel.getCompletedTasksCountByDate(dayStart, dayEnd).observe(viewLifecycleOwner) { count ->
                 entries.add(Entry(i.toFloat(), count.toFloat()))
                 labels.add(dateFormat.format(Date(dayStart)))
-                
+
                 if (entries.size == 7) {
                     val dataSet = LineDataSet(entries, "Hoàn thành")
                     dataSet.color = Color.parseColor("#2196F3")
@@ -285,10 +288,10 @@ class DashboardFragment : Fragment() {
                     dataSet.lineWidth = 2f
                     dataSet.circleRadius = 4f
                     dataSet.setDrawValues(false)
-                    
+
                     val lineData = LineData(dataSet)
                     chartWeekly.data = lineData
-                    
+
                     val xAxis = chartWeekly.xAxis
                     xAxis.valueFormatter = object : ValueFormatter() {
                         override fun getFormattedValue(value: Float): String {
@@ -296,7 +299,7 @@ class DashboardFragment : Fragment() {
                             return if (index >= 0 && index < labels.size) labels[index] else ""
                         }
                     }
-                    
+
                     chartWeekly.invalidate()
                 }
             }
@@ -343,45 +346,106 @@ class DashboardFragment : Fragment() {
                             return if (index >= 0 && index < labels.size) labels[index] else ""
                         }
                     }
-                    
+
                     chartMonthly.invalidate()
                 }
             }
         }
     }
     
+//    private fun updateHabitStreakChart(habits: List<com.example.personaltaskmanager.features.habit_tracker.data.model.Habit>) {
+//        val entries = mutableListOf<Entry>()
+//        val labels = mutableListOf<String>()
+//
+//        habits.sortedByDescending { it.streakDays }.take(5).forEachIndexed { index, habit ->
+//            entries.add(Entry(index.toFloat(), habit.streakDays.toFloat()))
+//            labels.add(habit.title.take(10))
+//        }
+//
+//        if (entries.isNotEmpty()) {
+//            val dataSet = LineDataSet(entries, "Streak")
+//            dataSet.color = Color.parseColor("#FFD700")
+//            dataSet.valueTextColor = Color.BLACK
+//            dataSet.setCircleColor(Color.parseColor("#FFD700"))
+//            dataSet.lineWidth = 2f
+//            dataSet.circleRadius = 4f
+//            dataSet.setDrawValues(true)
+//
+//            val lineData = LineData(dataSet)
+//            chartHabitStreak.data = lineData
+//
+//            val xAxis = chartHabitStreak.xAxis
+//            xAxis.valueFormatter = object : ValueFormatter() {
+//                override fun getFormattedValue(value: Float): String {
+//                    val index = value.toInt()
+//                    return if (index >= 0 && index < labels.size) labels[index] else ""
+//                }
+//            }
+//
+//            chartHabitStreak.invalidate()
+//        }
+//    }
     private fun updateHabitStreakChart(habits: List<com.example.personaltaskmanager.features.habit_tracker.data.model.Habit>) {
         val entries = mutableListOf<Entry>()
         val labels = mutableListOf<String>()
-        
-        habits.sortedByDescending { it.streakDays }.take(5).forEachIndexed { index, habit ->
+
+        // 1. Lấy dữ liệu Top 5 thói quen có streak cao nhất để biểu đồ không bị quá dày
+        val topHabits = habits.sortedByDescending { it.streakDays }.take(5)
+
+        topHabits.forEachIndexed { index, habit ->
+            // Gán index vào trục X (0, 1, 2...) và streakDays vào trục Y
             entries.add(Entry(index.toFloat(), habit.streakDays.toFloat()))
-            labels.add(habit.title.take(10))
+            labels.add(habit.title.take(10)) // Giới hạn 10 ký tự để không tràn nhãn
         }
-        
+
         if (entries.isNotEmpty()) {
-            val dataSet = LineDataSet(entries, "Streak")
-            dataSet.color = Color.parseColor("#FFD700")
-            dataSet.valueTextColor = Color.BLACK
+            // 2. Cấu hình DataSet (Đường biểu diễn)
+            val dataSet = LineDataSet(entries, "Chuỗi Streak")
+            dataSet.color = Color.parseColor("#FFD700")       // Màu vàng Gold
             dataSet.setCircleColor(Color.parseColor("#FFD700"))
-            dataSet.lineWidth = 2f
-            dataSet.circleRadius = 4f
-            dataSet.setDrawValues(true)
-            
+            dataSet.valueTextColor = Color.BLACK
+            dataSet.lineWidth = 2.5f                          // Độ dày đường kẻ
+            dataSet.circleRadius = 5f                         // Độ lớn điểm nút
+            dataSet.setDrawValues(true)                       // Hiển thị số streak trên điểm nút
+            dataSet.valueTextSize = 10f
+
+            // Tạo hiệu ứng đổ bóng phía dưới đường kẻ cho đẹp
+            dataSet.setDrawFilled(true)
+            dataSet.fillColor = Color.parseColor("#4DFFD700") // Màu vàng nhạt trong suốt
+
             val lineData = LineData(dataSet)
             chartHabitStreak.data = lineData
-            
+
+            // 3. Cấu hình TRỤC X (QUAN TRỌNG NHẤT ĐỂ SỬA LỖI LẶP TÊN)
             val xAxis = chartHabitStreak.xAxis
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.setDrawGridLines(false)
+
+            // Các dòng code giải quyết lỗi lặp nhãn:
+            xAxis.granularity = 1f              // Ép khoảng cách tối thiểu giữa các nhãn là 1 đơn vị
+            xAxis.isGranularityEnabled = true   // Kích hoạt tính năng chặn chia nhỏ nhãn (0.5, 1.5...)
+            xAxis.labelCount = labels.size      // Chỉ định rõ số lượng nhãn hiển thị tương ứng với số cột
+
             xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     val index = value.toInt()
-                    return if (index >= 0 && index < labels.size) labels[index] else ""
+                    // Kiểm tra điều kiện để tránh lỗi IndexOutOfBounds
+                    return if (index >= 0 && index < labels.size) {
+                        labels[index]
+                    } else {
+                        ""
+                    }
                 }
             }
-            
+
+            // 4. Làm mới biểu đồ với hiệu ứng
+            chartHabitStreak.animateX(1000) // Hiệu ứng chạy từ trái sang phải
             chartHabitStreak.invalidate()
+        } else {
+            chartHabitStreak.clear() // Xóa trắng biểu đồ nếu không có dữ liệu
         }
     }
+
 
     private fun setupPriorityChart() {
         chartPriority.description.isEnabled = false
@@ -498,8 +562,53 @@ class DashboardFragment : Fragment() {
         }
     }
 
+//    private fun updateTagsChart(tasks: List<Task>) {
+//        // Count tasks by tag
+//        val tagCounts = mutableMapOf<String, Int>()
+//        for (task in tasks) {
+//            if (task.isCompleted) {
+//                val tags = task.getTagsList()
+//                for (tag in tags) {
+//                    if (tag.isNotEmpty()) {
+//                        tagCounts[tag] = (tagCounts[tag] ?: 0) + 1
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Get top 5 tags
+//        val topTags = tagCounts.toList().sortedByDescending { it.second }.take(5)
+//
+//        if (topTags.isNotEmpty()) {
+//            val entries = mutableListOf<BarEntry>()
+//            val labels = mutableListOf<String>()
+//
+//            topTags.forEachIndexed { index, (tag, count) ->
+//                entries.add(BarEntry(index.toFloat(), count.toFloat()))
+//                labels.add(tag.take(10))
+//            }
+//
+//            val dataSet = BarDataSet(entries, "Tags")
+//            dataSet.color = Color.parseColor("#2196F3")
+//            dataSet.valueTextColor = Color.BLACK
+//
+//            val barData = BarData(dataSet)
+//            chartTags.data = barData
+//
+//            val xAxis = chartTags.xAxis
+//            xAxis.valueFormatter = object : ValueFormatter() {
+//                override fun getFormattedValue(value: Float): String {
+//                    val index = value.toInt()
+//                    return if (index >= 0 && index < labels.size) labels[index] else ""
+//                }
+//            }
+//
+//            chartTags.invalidate()
+//        }
+//    }
+
     private fun updateTagsChart(tasks: List<Task>) {
-        // Count tasks by tag
+        // 1. Đếm số lượng task theo tag
         val tagCounts = mutableMapOf<String, Int>()
         for (task in tasks) {
             if (task.isCompleted) {
@@ -512,7 +621,7 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        // Get top 5 tags
+        // 2. Lấy Top 5 tags nhiều nhất
         val topTags = tagCounts.toList().sortedByDescending { it.second }.take(5)
 
         if (topTags.isNotEmpty()) {
@@ -521,27 +630,49 @@ class DashboardFragment : Fragment() {
 
             topTags.forEachIndexed { index, (tag, count) ->
                 entries.add(BarEntry(index.toFloat(), count.toFloat()))
-                labels.add(tag.take(10))
+                labels.add(tag.take(10)) // Giới hạn 10 ký tự để không bị tràn
             }
 
             val dataSet = BarDataSet(entries, "Tags")
             dataSet.color = Color.parseColor("#2196F3")
             dataSet.valueTextColor = Color.BLACK
+            dataSet.valueTextSize = 10f
 
             val barData = BarData(dataSet)
             chartTags.data = barData
 
+            // 3. Cấu hình Trục X (CHÂN TRỊ ĐỂ HẾT LẶP TÊN)
             val xAxis = chartTags.xAxis
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.setDrawGridLines(false)
+
+            // QUAN TRỌNG: Ngăn chặn lặp nhãn
+            xAxis.granularity = 1f           // Chỉ cho phép bước nhảy là 1 đơn vị
+            xAxis.isGranularityEnabled = true // Kích hoạt chặn bước nhảy lẻ
+            xAxis.labelCount = labels.size    // Ép hiển thị đúng số lượng nhãn đang có
+
             xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     val index = value.toInt()
-                    return if (index >= 0 && index < labels.size) labels[index] else ""
+                    // Kiểm tra index hợp lệ để tránh Crash
+                    return if (index >= 0 && index < labels.size) {
+                        labels[index]
+                    } else {
+                        ""
+                    }
                 }
             }
 
+            // 4. Làm mới biểu đồ
+            chartTags.setFitBars(true) // Làm các cột khít với chiều rộng
+            chartTags.animateY(1000)   // Thêm hiệu ứng cho đẹp
             chartTags.invalidate()
+        } else {
+            chartTags.clear() // Xóa biểu đồ nếu không có dữ liệu
         }
     }
+
+
 
     private fun Int.dpToPx(): Int {
         val density = resources.displayMetrics.density
